@@ -1,0 +1,7 @@
+# production
+/dist
+
+# dependencie
+/node_modules
+
+.idea
