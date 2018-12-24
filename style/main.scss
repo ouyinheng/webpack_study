@@ -1,0 +1,30 @@
+$colors: (
+  p: red,
+  w: pink
+);
+@mixin border-radius($radius:5px) {
+  border-radius: $radius;
+}
+%pt5 {
+  padding-top: 5px;
+}
+#app {
+  width: 100px;
+  height: 100px;
+  border: 1px solid red;
+  transform: rotate(30deg);
+  .app {
+    animation-name: m;
+    @include border-radius(10px);
+  }
+  .btn {
+    @extend .app;
+    @extend %pt5;
+    width: 100px;
+  }
+}
+
+.test {
+  text: to-upper-case('aaa');
+  color: map-get($colors, p);
+}

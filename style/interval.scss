@@ -1,0 +1,19 @@
+$space: (
+  p: 'padding',
+  pt: 'padding-top',
+  pb: 'padding-bottom',
+  pl: 'padding-left',
+  pr: 'padding-right',
+  m: 'margin',
+  mt: 'margin-top',
+  mr: 'margin-right',
+  mb: 'margin-bottom',
+  ml: 'margin-left'
+);
+@each $key, $val in $space {
+  @for $i from 1 through 10 {
+    .#{$key}-#{$i} {
+      #{$val}: $i*5px;
+    }
+  }
+}

@@ -1,7 +1,10 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const config = {
+  mode: 'production',
   entry: [
     path.join(__dirname, "/../src/main.js")
   ],
@@ -15,20 +18,46 @@ const config = {
       filename: 'index.html',
       template: './index.html'
     }),
-    new ExtractTextWebpackPlugin('[name].[chunkhash].css')
+    new MiniCssExtractPlugin({
+      filename: "[name].min.css",
+      chunkFilename: "[id].css"
+    })
   ],
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true // set to true if you want JS source maps
+      }),
+      new OptimizeCSSAssetsPlugin({})
+    ]
+  },
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: ExtractTextWebpackPlugin.extract({
-          fallback:'style-loader',
-          use:[{
-            loader: 'css-loader'
-          },{
-            loader: 'postcss-loader'
-          }]
-        })
+        use: [{
+          loader: MiniCssExtractPlugin.loader,
+          options: {
+            publicPath: '../'
+          }
+        },
+        { loader: 'css-loader' },
+        { loader: 'postcss-loader' }]
+      },
+      {
+        test: /\.scss/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../'
+            }
+          },
+          { loader: 'css-loader' },
+          { loader: 'postcss-loader' },
+          { loader: 'sass-loader' }]
       },
       {
         test: /\.js$/,
